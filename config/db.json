@@ -1,0 +1,7 @@
+{
+  "URI": "mongodb://localhost/qulix-users",
+  "options": {
+    "useNewUrlParser": true,
+    "useUnifiedTopology": true
+  }
+}

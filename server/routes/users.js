@@ -1,12 +1,13 @@
-var express = require('express');
-var router = express.Router();
-const config = require('../../config').getConfig('db');
-const db = require('../db/DatabaseController')(config.URI, config.options);
-const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+
+//init Database
+const db = require('../db');
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  db.find()
+  db.getUsers()
     .then(users => res.send(users))
     .catch(next);
 });

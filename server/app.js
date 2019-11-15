@@ -2,12 +2,13 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const config = require('../config').getConfig('db');
 
-const db = require('./db/DatabaseController')(config.URI, config.options);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const createUserRouter = require('./routes/create');
+const deleteUserRouter = require('./routes/delete');
+
 
 const app = express();
 
@@ -19,5 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/create', createUserRouter);
+app.use('/delete', deleteUserRouter);
 
 module.exports = app;
