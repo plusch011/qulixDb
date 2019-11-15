@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@material-ui/core';
+import TableAdminPanel from "./tableAdminPanel/TableAdminPanel";
 import httpController from "../../services/httpController";
+
 
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
+        marginTop: "80px"
     },
     paper: {
         marginTop: theme.spacing(3),
@@ -14,7 +17,7 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(2),
     },
     table: {
-        minWidth: 650,
+        minWidth: 355,
     },
 }));
 
@@ -25,7 +28,6 @@ export default function UsersTable() {
 
     useEffect( async () => {
         const data = await httpController.getUsers();
-        console.log(data);
         setUsers(data);
     }, []);
 
@@ -36,10 +38,12 @@ export default function UsersTable() {
                 <Table className={classes.table} size="small">
                     <TableBody>
                         {users.map(user => (
-                            <TableRow key={user.name}>
+                            <TableRow key={user.name} >
                                 <TableCell align="left">{user.username}</TableCell>
-                                <TableCell align="left">{user._id}</TableCell>
                                 <TableCell align="left">{user.created}</TableCell>
+                                <TableCell align="right">
+                                    <TableAdminPanel user={ user }/>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

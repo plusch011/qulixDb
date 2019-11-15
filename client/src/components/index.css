@@ -2,3 +2,12 @@
     margin: 0;
     padding: 0;
 }
+
+
+body {
+    overflow: auto;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}

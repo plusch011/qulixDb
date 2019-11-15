@@ -1,5 +1,6 @@
 import blue from '@material-ui/core/colors/purple';
 
+
 export default {
     palette: {
         primary: {
