@@ -37,30 +37,30 @@ const useStyles = makeStyles(theme => ({
 const SingUpBlock = () => {
     return (
         <>
-    <Grid item xs={12} sm={6}>
-        <TextField
-            autoComplete="fname"
-            name="firstName"
-            variant="outlined"
-            required
-            fullWidth
-            id="firstName"
-            label="First Name"
-            autoFocus
-        />
-    </Grid>
-    <Grid item xs={12} sm={6}>
-        <TextField
-            variant="outlined"
-            required
-            fullWidth
-            id="lastName"
-            label="Last Name"
-            name="lastName"
-            autoComplete="lname"
-        />
-        </Grid>
-            </>
+            <Grid item xs={12} sm={6}>
+                <TextField
+                    autoComplete="fname"
+                    name="firstName"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First Name"
+                    autoFocus
+                />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="Last Name"
+                    name="lastName"
+                    autoComplete="lname"
+                />
+            </Grid>
+        </>
     )
 }
 

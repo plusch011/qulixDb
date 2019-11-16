@@ -1,4 +1,6 @@
+import React from "react";
 import axios from "axios";
+import { Redirect } from "react-router"
 
 class HttpController {
 
@@ -8,8 +10,13 @@ class HttpController {
 
     getUsers = async () => {
         return await axios.get('/users')
-            .then(response => response.data)
-            .catch(err => this.routeToLogin());
+            .then( item => {
+                    <Redirect to="login" />
+                return item;
+
+            }
+                )
+            .catch(err => <Redirect to="login" />);
     }
 
     createUser = async ( userData ) => {
