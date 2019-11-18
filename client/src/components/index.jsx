@@ -1,8 +1,8 @@
 import React from 'react';
-import HeaderLayout from "./header/HeaderLayout";
-import MainLayout from "./main/MainLayout";
-import LoginForm from "../components/loginForm";
-import Dashboard from "./profile/Dashboard";
+import HeaderLayout from "./header";
+import MainLayout from "./main";
+import LoginForm from "./loginForm";
+import Profile from "./profile";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./index.css";
 
@@ -15,7 +15,7 @@ export default function App() {
                         <LoginForm />
                     </Route>
                     <Route path="/profile">
-                        <Dashboard />
+                        <Profile />
                     </Route>
                     <Route path="/">
                         <HeaderLayout />
