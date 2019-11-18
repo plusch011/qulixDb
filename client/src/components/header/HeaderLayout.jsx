@@ -5,10 +5,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import materialUiTheme from "../../constants/materialUiTheme";
 import purple from '@material-ui/core/colors/purple';
+import httpController from "../../services/httpController";
+import { Link, useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles(theme => ({
-
     grow: {
         flexGrow: 1,
     },
@@ -23,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 export default function PrimarySearchAppBar() {
     const theme = createMuiTheme(materialUiTheme);
     const classes = useStyles(theme);
+    const history = useHistory();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const isMenuOpen = Boolean(anchorEl);
@@ -33,6 +35,10 @@ export default function PrimarySearchAppBar() {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        httpController.submitLogout().then(() => history.push('/login'));
     };
 
     const menuId = 'primary-search-account-menu';
@@ -74,8 +80,12 @@ export default function PrimarySearchAppBar() {
                 open={isMenuOpen}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+                <MenuItem>
+                    <Link to="/profile">
+                        Profile
+                    </Link>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </div>
     );

@@ -1,13 +1,10 @@
-import React, { useState }from 'react';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-
+import { Button, CssBaseline, TextField, Typography, Container, Grid } from '@material-ui/core';
+import setUserData from '../../actions';
+import { connect } from 'react-redux';
+import httpController from "../../services/httpController";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -21,10 +18,6 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
@@ -34,64 +27,40 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SingUpBlock = () => {
-    return (
-        <>
-            <Grid item xs={12} sm={6}>
-                <TextField
-                    autoComplete="fname"
-                    name="firstName"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="lname"
-                />
-            </Grid>
-        </>
-    )
-}
-
-export default function LoginForm() {
+function LoginForm({ setUserDataToStore }) {
     const classes = useStyles();
+    const history = useHistory();
 
-    const [ loginStatus, setLoginStatus ] = useState(false);
+    const submitLogin = async (e) => {
+        e.preventDefault();
 
-    const toggleLoginStatus = () => {
-        setLoginStatus(!loginStatus);
-    }
+        await httpController.submitLogin({
+            username: e.nativeEvent.target[0].value,
+            password: e.nativeEvent.target[2].value
+        }).then(data => {
+            setUserDataToStore(data);
+            history.push('/');
+        });
+    };
 
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
                 <Typography component="h1" variant="h5">
-                    { loginStatus ? "Sign up" : "Sing in" }
+                    Sing in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={ submitLogin }>
                     <Grid container spacing={2}>
-                        { loginStatus && <SingUpBlock />}
                         <Grid item xs={12}>
                             <TextField
+                                autoComplete="username"
+                                name="username"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                id="username"
+                                label="Username"
                                 autoFocus
                             />
                         </Grid>
@@ -115,15 +84,17 @@ export default function LoginForm() {
                         color="primary"
                         className={classes.submit}
                     >
-                        { loginStatus ? "Sign up" : "Sign in" }
+                        Sign in
                     </Button>
-                    <Grid item>
-                        <Link href="#" variant="body2" onClick={ toggleLoginStatus }>
-                            { loginStatus ? "Go to sign in" : "Go to registration" }
-                        </Link>
-                    </Grid>
                 </form>
             </div>
         </Container>
     );
-}
+};
+
+const mapDispatchToProps = dispatch => ({
+    setUserDataToStore: data => dispatch(setUserData(data))
+});
+
+
+export default connect(null, mapDispatchToProps)(LoginForm)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
 import TableAdminPanel from "./tableAdminPanel/TableAdminPanel";
 import httpController from "../../services/httpController";
 
@@ -26,23 +26,25 @@ export default function UsersTable() {
     const [ users, setUsers ] = useState([]);
     const classes = useStyles();
 
-    useEffect( async () => {
-        const data = await httpController.getUsers();
-        setUsers(data);
+    useEffect(  () => {
+        httpController.getUsers().then(data => setUsers(data));
     }, []);
 
-    return (
+    const deleteUser = (user) => {
+        httpController.deleteUser(user["_id"]).then(() => setUsers(users.filter(user1 => user1 !== user)));
+    };
 
+    return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <Table className={classes.table} size="small">
                     <TableBody>
                         {users.map(user => (
-                            <TableRow key={user.name} >
+                            <TableRow key={user.username} >
                                 <TableCell align="left">{user.username}</TableCell>
                                 <TableCell align="left">{user.created}</TableCell>
                                 <TableCell align="right">
-                                    <TableAdminPanel user={ user }/>
+                                    <TableAdminPanel user={ user } deleteUser={ deleteUser } />
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -51,5 +53,5 @@ export default function UsersTable() {
             </Paper>
         </div>
     );
-}
+};
 

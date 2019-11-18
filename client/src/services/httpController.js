@@ -1,39 +1,40 @@
-import React from "react";
 import axios from "axios";
-import { Redirect } from "react-router"
+
 
 class HttpController {
 
-    routeToLogin = () => {
-        window.location.href = "/login"
-    }
+    submitLogin = async (data) =>
+        await axios.post('/login', data)
+                   .then(response => response.data);
 
-    getUsers = async () => {
-        return await axios.get('/users')
-            .then( item => {
-                    <Redirect to="login" />
-                return item;
 
-            }
-                )
-            .catch(err => <Redirect to="login" />);
-    }
+    submitLogout = async (data) =>
+        axios.post('/logout');
 
-    createUser = async ( userData ) => {
+    getUsers = async () =>
+         await axios.get('/users')
+            .then(response => response.data);
+
+    createUser = async ( userData ) =>
         axios({
             method: 'post',
             url: '/users',
             data: userData
         });
-    }
 
-    deleteUser = async (userId) => {
+    editUser = async (newUserData) =>
+        axios({
+            method: 'put',
+            url: '/update',
+            data: newUserData
+        });
+
+    deleteUser = async (_id) =>
         axios({
             method: 'post',
             url: '/delete',
-            data: userId
-        });
-    }
+            data: { _id }
+    })
 }
 
 const httpController = new HttpController();

@@ -1,14 +1,10 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import { Menu, MenuItem, ListItemIcon, ListItemText, IconButton } from '@material-ui/core';
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import httpController from "../../../services/httpController";
+import UserEditModal from "../../../modals/UserEditModal";
 
 
 const StyledMenu = withStyles({
@@ -42,8 +38,9 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export default function TableAdminPanel({ user }) {
+export default function TableAdminPanel({ user, deleteUser }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [isOpen, setIsOpen] = React.useState(false);
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
@@ -53,9 +50,18 @@ export default function TableAdminPanel({ user }) {
         setAnchorEl(null);
     };
 
-    const deleteUser = () => {
-        httpController.deleteUser(user._id);
-        console.log("dfdfdf");
+    const handleDeleteUser = (user) => {
+        deleteUser(user);
+        handleClose();
+    };
+
+    const handleEditUser = () => {
+        toggleModalOpen();
+        handleClose();
+    };
+
+    const toggleModalOpen = () => {
+        setIsOpen(!isOpen);
     };
 
     return (
@@ -75,19 +81,20 @@ export default function TableAdminPanel({ user }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <StyledMenuItem >
+                <StyledMenuItem onClick={ () => handleEditUser(user) }>
                     <ListItemIcon>
                         <EditIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </StyledMenuItem>
-                <StyledMenuItem onClick={deleteUser()}>
+                <StyledMenuItem onClick={ () => handleDeleteUser(user) }>
                     <ListItemIcon>
                         <DeleteIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Delete" />
                 </StyledMenuItem>
             </StyledMenu>
+            <UserEditModal isOpen={ isOpen } closeModal={ toggleModalOpen } user={ user }/>
         </div>
     );
 }
