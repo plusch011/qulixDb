@@ -1,11 +1,12 @@
-import blue from '@material-ui/core/colors/purple';
+import { createMuiTheme } from '@material-ui/core/styles';
 
-
-export default {
+export default createMuiTheme({
     palette: {
         primary: {
-            main: '#512da8',
+            main: '#1e88e5',
         },
-        secondary: blue,
+        secondary: {
+            main: '#1976d2'
+        }
     },
-}
+});

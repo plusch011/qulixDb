@@ -1,6 +1,7 @@
-const setUserData = userData => ({
-    type: 'SET_USER_DATA',
-    payload: userData,
-});
+export const setLoadingTrue = {
+    type: 'SET_LOADING_TRUE'
+};
 
- export default setUserData;
+export const setLoadingFalse = {
+    type: 'SET_LOADING_FALSE'
+};

@@ -1,9 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, CssBaseline, TextField, Typography, Container, Grid } from '@material-ui/core';
-import setUserData from '../../actions';
-import { connect } from 'react-redux';
 import httpController from "../../services/httpController";
+import loadingWrapper from "../../services/loadingWrapper";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -27,19 +26,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function LoginForm({ setUserDataToStore }) {
+export default function LoginForm() {
     const classes = useStyles();
     const history = useHistory();
+
 
     const submitLogin = async (e) => {
         e.preventDefault();
 
-        await httpController.submitLogin({
+        await loadingWrapper(httpController.submitLogin, {
             username: e.nativeEvent.target[0].value,
             password: e.nativeEvent.target[2].value
-        }).then(data => {
-            setUserDataToStore(data);
-            history.push('/');
+        }).then(() => {
+            history.replace({
+                pathname: '/',
+                state: true
+            });
         });
     };
 
@@ -91,10 +93,3 @@ function LoginForm({ setUserDataToStore }) {
         </Container>
     );
 };
-
-const mapDispatchToProps = dispatch => ({
-    setUserDataToStore: data => dispatch(setUserData(data))
-});
-
-
-export default connect(null, mapDispatchToProps)(LoginForm)

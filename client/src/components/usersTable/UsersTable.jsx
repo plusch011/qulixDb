@@ -1,57 +1,78 @@
 import React, { useEffect, useState } from 'react';
+import UserModal from "../modals/UserModal";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import { Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
-import TableAdminPanel from "./tableAdminPanel/TableAdminPanel";
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import httpController from "../../services/httpController";
+import loadingWrapper from "../../services/loadingWrapper";
+import { formatDate } from "../../utils";
 
 
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
-        marginTop: "80px"
     },
-    paper: {
-        marginTop: theme.spacing(3),
-        width: '100%',
-        overflowX: 'auto',
-        marginBottom: theme.spacing(2),
+    tableWrapper: {
+        maxHeight: "92vh",
+        overflow: 'auto',
     },
-    table: {
-        minWidth: 355,
-    },
+    head: {
+        backgroundColor: theme.palette.primary.main,
+        color: "white"
+    }
 }));
 
-
 export default function UsersTable() {
-    const [ users, setUsers ] = useState([]);
     const classes = useStyles();
+    const tableHeadNames = ["Username", "Created"];
+    const [ users, setUsers ] = useState([]);
+    const [ currentUser, setCurrentUser ] = useState([]);
+    const [ isModalOpen, setModalOpen ] = useState(false);
+    const history = useHistory();
 
-    useEffect(  () => {
-        httpController.getUsers().then(data => setUsers(data));
-    }, []);
-
-    const deleteUser = (user) => {
-        httpController.deleteUser(user["_id"]).then(() => setUsers(users.filter(user1 => user1 !== user)));
+    const handleRowClick = (username) => {
+        loadingWrapper(httpController.getFullUserInfo, username)
+            .then(data => { setCurrentUser(data) })
+            .then(() => setModalOpen(true));
     };
 
+    const handleModalClose = () => {
+        setModalOpen(false);
+    };
+
+    useEffect(  () => {
+        loadingWrapper(httpController.getUsers)
+            .then(data => setUsers(data))
+            .catch(() => history.push('/login'))
+    }, [history]);
+
+
     return (
-        <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <Table className={classes.table} size="small">
+        <Paper className={classes.root}>
+            <div className={classes.tableWrapper}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead className={ classes.tableHead }>
+                        <TableRow>
+                            { tableHeadNames.map(name => <TableCell className={ classes.head } key={name } align="center">{ name }</TableCell>) }
+                        </TableRow>
+                    </TableHead>
                     <TableBody>
-                        {users.map(user => (
-                            <TableRow key={user.username} >
-                                <TableCell align="left">{user.username}</TableCell>
-                                <TableCell align="left">{user.created}</TableCell>
-                                <TableCell align="right">
-                                    <TableAdminPanel user={ user } deleteUser={ deleteUser } />
-                                </TableCell>
+                        {users.map(user =>
+                            <TableRow hover key={user.username} onClick={ () => handleRowClick(user.username) }>
+                                <TableCell align="center">{ user.username }</TableCell>
+                                <TableCell align="center">{ formatDate(user.created) }</TableCell>
                             </TableRow>
-                        ))}
+                        )}
                     </TableBody>
                 </Table>
-            </Paper>
-        </div>
-    );
-};
+            </div>
 
+            {isModalOpen &&
+                <UserModal
+                    currentUser={ currentUser }
+                    handleModalClick={ handleModalClose }
+                />
+            }
+        </Paper>
+    );
+}
