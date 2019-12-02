@@ -3,14 +3,10 @@ import axios from "axios";
 class HttpController {
     submitLogin = async (data) =>
         await axios.post('/login', data)
-                   .then(response => response.data);
+            .then(response => response.data);
 
     submitLogout = async () =>
         axios.post('/logout');
-
-    getUsers = async () =>
-         await axios.get('/users')
-            .then(response => response.data);
 
     createUser = async ( userData ) =>
         axios({
@@ -37,8 +33,8 @@ class HttpController {
         await axios.get(`/users/${ username }`)
             .then(response => response.data);
 
-    getUserInfo = async () =>
-        axios.get('/profile')
+    getUsersInfo = async () =>
+        axios.get('/users')
              .then(response => response.data);
 }
 

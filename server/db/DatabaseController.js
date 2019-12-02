@@ -59,7 +59,7 @@ class DatabaseController {
 //   })
 //   .then(() => {
 //     debug('cleared db');
-//     return ctrl.createUser({usersTable: 'user', password: 'password'});
+//     return ctrl.createUser({mainTable: 'user', password: 'password'});
 //   })
 //   .then(() => mongoose.models.User.find())
 //   .then(users => debug(users))

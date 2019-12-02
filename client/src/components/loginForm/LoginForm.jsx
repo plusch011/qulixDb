@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, CssBaseline, TextField, Typography, Container, Grid } from '@material-ui/core';
-import httpController from "../../services/httpController";
-import loadingWrapper from "../../services/loadingWrapper";
+import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
+
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -26,23 +26,30 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function LoginForm() {
+function LoginForm({  submitLoginForm }) {
     const classes = useStyles();
     const history = useHistory();
 
 
-    const submitLogin = async (e) => {
+    const submitLogin = (e) => {
         e.preventDefault();
 
-        await loadingWrapper(httpController.submitLogin, {
+
+        submitLoginForm({
             username: e.nativeEvent.target[0].value,
             password: e.nativeEvent.target[2].value
-        }).then(() => {
-            history.replace({
-                pathname: '/',
-                state: true
-            });
         });
+
+
+        // httpController.submitLogin( {
+        //     username: e.nativeEvent.target[0].value,
+        //     password: e.nativeEvent.target[2].value
+        // }).then(() => {
+        //     history.replace({
+        //         pathname: '/users',
+        //         state: true
+        //     });
+        // });
     };
 
     return (
@@ -92,4 +99,16 @@ export default function LoginForm() {
             </div>
         </Container>
     );
-};
+}
+
+
+const mapDispatchToProps = (dispatch) => ({
+   submitLoginForm: (data) =>  dispatch({
+       type: "USER_LOGIN",
+       payload: data
+   })
+});
+
+
+
+export default connect(null, mapDispatchToProps)(LoginForm);
