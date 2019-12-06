@@ -1,13 +1,27 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ToolBar from "../toolbar";
 import Loading from "../loading";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-export default function AppLayout(props) {
+function AppLayout(props) {
+
+    const { children, error } = props;
+
     return (
         <>
-            { props.children }
+            { children }
             <Loading />
+            { error && <ErrorMessage error={ error }/> }
             <ToolBar />
         </>
     );
 }
+
+const mapStateToProps = (state) => ({
+    error: state.error
+});
+
+export default connect(mapStateToProps)(AppLayout);
+
+

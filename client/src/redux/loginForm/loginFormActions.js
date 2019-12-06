@@ -1,9 +1,7 @@
-export const getProfileInfoSuccess = (data) => ({
-    type: 'GET_PROFILE_INFO_SUCCESS',
-    payload: data
-});
+import { GET_PROFILE_INFO_SUCCESS } from '../../constants/atcionsNames';
 
-export const getProfileInfoError = (error) => ({
-    type: 'GET_PROFILE_INFO_ERROR',
-    payload: error.text
+
+export const getProfileInfoSuccess = (data) => ({
+    type: GET_PROFILE_INFO_SUCCESS,
+    payload: data
 });

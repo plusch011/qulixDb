@@ -1,9 +1,11 @@
-export const getUsersInfoSuccess = (data) => ({
-    type: 'GET_USERS_INFO_SUCCESS',
-    payload: data
-});
+import { GET_USERS_INFO_SUCCESS, GET_USERS_INFO } from '../../constants/atcionsNames';
 
-export const getUsersInfoError = (error) => ({
-    type: 'GET_USERS_INFO_ERROR',
-    payload: error.text
+
+export const getUsersInfo = {
+    type: GET_USERS_INFO
+};
+
+export const getUsersInfoSuccess = (data) => ({
+    type: GET_USERS_INFO_SUCCESS,
+    payload: data
 });

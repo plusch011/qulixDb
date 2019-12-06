@@ -8,10 +8,11 @@ import theme from "../constants/materialUiTheme";
 import Loading from "./loading/Loading";
 import MainTable from "./mainTable";
 import { createBrowserHistory } from "history";
+import { connect } from 'react-redux';
 import "./index.css";
 
 
-export default function App() {
+function App({ profileInfo }) {
 
     const customHistory = createBrowserHistory();
 
@@ -22,6 +23,7 @@ export default function App() {
     return (
         <ThemeProvider theme={ theme }>
             <Router history={ customHistory }>
+                {/*{ profileInfo && <Redirect  to="/login" /> }*/}
                 <div>
                     <Switch>
                         <Route path="/login">
@@ -38,12 +40,19 @@ export default function App() {
                                 <MainTable />
                             </AppLayout>
                         </Route>
-                        <Redirect from="/login" to="/users" />
                     </Switch>
                 </div>
             </Router>
         </ThemeProvider>
     );
 }
+
+const mapStateToProps = (state) => ({
+    profileInfo: state.profileInfo
+});
+
+export default connect(mapStateToProps)(App);
+
+
 
 

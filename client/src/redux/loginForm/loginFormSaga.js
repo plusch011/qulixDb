@@ -1,7 +1,8 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
-import { getProfileInfoSuccess, getProfileInfoError } from '../loginForm/loginFormActions';
+import { getProfileInfoSuccess } from '../loginForm/loginFormActions';
 import { setLoadingTrue, setLoadingFalse } from '../loading/loadingActions';
 import httpController from "../../services/httpController";
+import {SET_ERROR_DATA} from "../../constants/atcionsNames";
 
 
 function* addProfileDataToStore(action) {
@@ -10,7 +11,7 @@ function* addProfileDataToStore(action) {
         const data = yield call( httpController.submitLogin, action.payload );
         yield put( getProfileInfoSuccess(data) );
     } catch (e) {
-        yield put( getProfileInfoError(e) )
+        yield put( { type: SET_ERROR_DATA, payload: e } )
     } finally {
         yield put(setLoadingFalse);
     }

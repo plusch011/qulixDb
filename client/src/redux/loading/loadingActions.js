@@ -1,7 +1,5 @@
-export const setLoadingTrue = {
-    type: 'SET_LOADING_TRUE'
-};
+import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../../constants/atcionsNames';
 
-export const setLoadingFalse = {
-    type: 'SET_LOADING_FALSE'
-};
+
+export const setLoadingTrue = { type: SET_LOADING_TRUE };
+export const setLoadingFalse = { type: SET_LOADING_FALSE };

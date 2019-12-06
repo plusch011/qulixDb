@@ -1,16 +1,17 @@
-import { put, takeLatest, call } from 'redux-saga/effects';
-import { getUsersInfoSuccess, getUsersInfoError } from './mainTableActions';
+import { put, takeEvery, call } from 'redux-saga/effects';
+import { getUsersInfoSuccess } from './mainTableActions';
 import { setLoadingTrue, setLoadingFalse } from '../loading/loadingActions';
+import { GET_USERS_INFO, SET_ERROR_DATA } from '../../constants/atcionsNames';
 import httpController from "../../services/httpController";
 
 
-function* addUsersDataToStore() {
+function* addUsersInfoToStore() {
     try {
         yield put(setLoadingTrue);
-        const data = yield call( httpController.getUsersInfo );
-        yield put( getUsersInfoSuccess(data) );
+        const data = yield call(httpController.getUsersInfo);
+        yield put(getUsersInfoSuccess(data));
     } catch (e) {
-        yield put( getUsersInfoError(e) )
+        yield put({ type: SET_ERROR_DATA, payload: e });
     } finally {
         yield put(setLoadingFalse);
     }
@@ -18,5 +19,5 @@ function* addUsersDataToStore() {
 
 
 export function* addMainTableSaga() {
-    yield takeLatest('GET_USERS_DATA', addUsersDataToStore);
+    yield takeEvery(GET_USERS_INFO, addUsersInfoToStore);
 }
